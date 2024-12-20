@@ -10,6 +10,7 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QScrollArea
 )
+from UI.tab.inputLineEdit import inputLineEdit
 
 class signlnWidget(QWidget):
     def __init__(self, parent=None):
@@ -41,9 +42,9 @@ class signlnWidget(QWidget):
 
         # 设置溢出数字
         fun_Layout = QHBoxLayout()
-        self.fun_unmber = QLabel("请输入要溢出到的地址", self)
+        self.fun_unmber = QLabel("请输入溢出的数据大小", self)
         self.add8 = QCheckBox("覆盖帧指针（即数据+8）",self)
-        self.fun_number_text = QLineEdit(self)
+        self.fun_number_text = inputLineEdit(["int"])
         self.fun_number_text.resize(100,5)
         fun_Layout.addWidget(self.fun_unmber)
         fun_Layout.addWidget(self.fun_number_text)
@@ -52,9 +53,9 @@ class signlnWidget(QWidget):
 
         # 设置溢出地址
         fun_arr = QHBoxLayout()
-        self.fun_arr_unmber = QLabel("请输入溢出的数据大小", self)
+        self.fun_arr_unmber = QLabel("请输入要溢出到的地址", self)
         self.add1 = QCheckBox("跳过首指令（即地址+1）", self)
-        self.fun_arr_text = QLineEdit(self)
+        self.fun_arr_text = inputLineEdit( ["bit"])
         self.fun_arr_text.resize(100, 5)
         fun_arr.addWidget(self.fun_arr_unmber)
         fun_arr.addWidget(self.fun_arr_text)

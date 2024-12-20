@@ -46,6 +46,8 @@ class inputInt(QWidget):
 
         # 设置 MIME 数据（这里我们传输文本数据）
         mime_data.setText(self.text_input.text())
+        # ！设置输出类型
+        mime_data.setData("application/x-int", b"int")  
         drag.setMimeData(mime_data)  # 设置 mime_data
 
         # 启动拖动操作，使用 CopyAction 允许复制

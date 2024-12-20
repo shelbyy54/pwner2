@@ -57,8 +57,11 @@ class inputAddress(QWidget):
         self.render(painter)
         painter.end()
         drag.setPixmap(pixmap)
+        # 设置 MIME 数据（这里我们传输文本数据）
         mime_data.setText(self.add_system_format_text(self.text_input.text()))
-        drag.setMimeData(mime_data)
+        # ！设置输出类型
+        mime_data.setData("application/x-bit", b"bit")  # 设置自定义 MIME 类型
+        drag.setMimeData(mime_data)  # 设置 mime_data
         drag.exec(Qt.DropAction.CopyAction)
 
     def add_system_format_text(self, base_text):

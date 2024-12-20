@@ -19,7 +19,7 @@ class inputText(QDockWidget):
         input_Layout = QHBoxLayout()
         # 竖直布局0
         input_0 = QVBoxLayout()
-        self.int_input = inputInt("整数")
+        self.int_input = inputInt("整数(输出int类型)")
         input_0.addWidget(self.int_input)
         input_0.addWidget(inputInt())
         input_0.addWidget(inputInt())
@@ -27,7 +27,7 @@ class inputText(QDockWidget):
 
         # 竖直布局1
         input_1 = QVBoxLayout()
-        self.address_input = inputAddress("地址")
+        self.address_input = inputAddress("地址(输出bit类型)")
         input_1.addWidget(self.address_input)
         input_1.addWidget(inputAddress())
         input_1.addWidget(inputAddress())

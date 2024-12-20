@@ -9,7 +9,8 @@ from PyQt6.QtWidgets import (
     QLineEdit,
     QScrollArea
 )
-from PyQt6.QtCore import QDir
+from PyQt6.QtCore import QDir, pyqtSlot
+from UI.tab.inputLineEdit import inputLineEdit
 
 class fileWidget(QWidget):
     def __init__(self, parent=None):
@@ -52,6 +53,7 @@ class fileWidget(QWidget):
         outer_layout = QVBoxLayout(self)
         outer_layout.addWidget(scroll_area)
 
+    @pyqtSlot()
     def open_file_dialog(self):
         # 打开文件选择对话框
         file_name, _ = QFileDialog.getOpenFileName(
