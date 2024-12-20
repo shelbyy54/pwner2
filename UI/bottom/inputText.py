@@ -19,9 +19,9 @@ class inputText(QDockWidget):
         super().__init__("统一输入控制", parent)
 
         # 创建布局(水平)
-        input_Layout = QHBoxLayout(self)
+        input_Layout = QHBoxLayout()
         # 竖直布局0
-        input_0 = QVBoxLayout(self)
+        input_0 = QVBoxLayout()
         self.int_input = inputInt("整数")
         input_0.addWidget(self.int_input)
         input_0.addWidget(inputInt())
@@ -29,7 +29,7 @@ class inputText(QDockWidget):
         input_0.addWidget(inputInt())
 
         # 竖直布局1
-        input_1 = QVBoxLayout(self)
+        input_1 = QVBoxLayout()
         self.address_input = inputAddress("地址")
         input_1.addWidget(self.address_input)
         input_1.addWidget(inputAddress())

@@ -19,9 +19,9 @@ class fileWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # 创建布局
-        layout = QVBoxLayout(self)
+        layout = QVBoxLayout()
 
-        file_path_Layout = QHBoxLayout(self)
+        file_path_Layout = QHBoxLayout()
         # 创建提示标签
         self.prompt_label = QLabel("请选择一个文件：", self)
         file_path_Layout.addWidget(self.prompt_label)

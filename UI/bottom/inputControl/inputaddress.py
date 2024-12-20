@@ -31,7 +31,7 @@ class inputAddress(QWidget):
         self.system.addItem('arm')
 
         # 创建水平布局
-        layout = QHBoxLayout(self)
+        layout = QHBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.system)
         layout.addWidget(self.text_input)

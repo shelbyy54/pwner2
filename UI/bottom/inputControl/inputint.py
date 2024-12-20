@@ -12,7 +12,7 @@ class inputInt(QWidget):
         self.text_input = QLineEdit(self)
 
         # 创建水平布局
-        layout = QHBoxLayout(self)
+        layout = QHBoxLayout()
         layout.addWidget(self.label)
         layout.addWidget(self.text_input)
 

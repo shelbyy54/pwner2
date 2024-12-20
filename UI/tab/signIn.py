@@ -19,10 +19,10 @@ class signlnWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         # 创建主要布局
-        layout = QVBoxLayout(self)
+        layout = QVBoxLayout()
 
         # 水平布局
-        fun_name_Layout = QHBoxLayout(self)
+        fun_name_Layout = QHBoxLayout()
         #设置标签
         self.fun_Label = QLabel("请选择栈溢出函数", self)
         # 设置下拉窗口
@@ -39,7 +39,7 @@ class signlnWidget(QWidget):
 
 
         # 设置溢出数字
-        fun_Layout = QHBoxLayout(self)
+        fun_Layout = QHBoxLayout()
         self.fun_unmber = QLabel("请输入要溢出到的地址", self)
         self.add8 = QCheckBox("覆盖帧指针（即数据+8）",self)
         self.fun_number_text = QLineEdit(self)
@@ -50,7 +50,7 @@ class signlnWidget(QWidget):
         layout.addLayout(fun_Layout)
 
         # 设置溢出地址
-        fun_arr = QHBoxLayout(self)
+        fun_arr = QHBoxLayout()
         self.fun_arr_unmber = QLabel("请输入溢出的数据大小", self)
         self.add1 = QCheckBox("跳过首指令（即地址+1）", self)
         self.fun_arr_text = QLineEdit(self)
@@ -64,7 +64,6 @@ class signlnWidget(QWidget):
         # 设置生成代码按钮
         self.make_code = QPushButton("生成代码",self)
         layout.addWidget(self.make_code)
-
 
         # 设置布局
         self.setLayout(layout)
