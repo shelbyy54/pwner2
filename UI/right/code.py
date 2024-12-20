@@ -67,12 +67,14 @@ class codeEditor(QDockWidget):
         # 设置停靠区域，右侧
         self.setAllowedAreas(Qt.DockWidgetArea.RightDockWidgetArea)
 
+
     def save_code(self):
         # 获取文本框中的内容
         code = self.text_edit.toPlainText()
         with open("saved_code.py", "w", encoding="utf-8") as file:
             file.write(code)
         print("代码已保存到 saved_code.py")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

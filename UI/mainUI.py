@@ -1,5 +1,13 @@
 import sys
 from PyQt6.QtWidgets import (
+    QMainWindow,
+    QTabWidget,
+    QDockWidget,
+    QVBoxLayout,
+    QWidget,
+)
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import (
     QApplication,
     QMainWindow,
     QTabWidget,
@@ -7,16 +15,16 @@ from PyQt6.QtWidgets import (
     QTextEdit,
     QVBoxLayout,
     QWidget,
-    QLabel
+    QMenuBar,
 )
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction
+import sys
 
 # 导入模块
-# 把你的ui模块丢到/UI/tab里面，然后输入
-# from UI.tab.你的模块名字 import 你的类名字
 from UI.tab.file import fileWidget
 from UI.tab.signIn import signlnWidget
 from UI.right.code import codeEditor
+from UI.bottom.inputText import inputText
 
 
 class MainWindow(QMainWindow):
@@ -27,12 +35,12 @@ class MainWindow(QMainWindow):
         tab_list: list[list[QWidget, str]] = [
             [fileWidget(), "设置文件"],
             [signlnWidget(), "签到栈溢出"],
-            #放置[你的类名字(),"你想要显示的标题"],<-别忘了还有个逗号
+            # 放置[你的类名字(),"你想要显示的标题"],<-别忘了还有个逗号
         ]
         # 在这里放置右侧窗口
         right_widget: QDockWidget = codeEditor(self)
         # 在这里放置底部窗口
-        bottom_widget: QDockWidget = codeEditor(self)
+        bottom_widget: QDockWidget = inputText(self)
 
         self.init_ui(tab_list, right_widget, bottom_widget)
 
@@ -65,9 +73,41 @@ class MainWindow(QMainWindow):
         self.addDockWidget(
             Qt.DockWidgetArea.BottomDockWidgetArea, bottom_widget)
 
+        # 添加菜单栏
+        self.create_menus()
 
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    def create_menus(self):
+        """创建菜单栏，允许重新打开右侧和底部悬浮窗"""
+        menubar = self.menuBar()
+
+        # 创建视图菜单
+        view_menu = menubar.addMenu("视图")
+
+        # 创建右侧悬浮窗的重新打开操作
+        self.reopen_right_action = QAction("右侧悬浮窗", self)
+        self.reopen_right_action.setCheckable(True)  # 设置为可检查
+        self.reopen_right_action.toggled.connect(self.toggle_right_dock)  # 连接 toggled 信号
+        view_menu.addAction(self.reopen_right_action)
+
+        # 创建底部悬浮窗的重新打开操作
+        self.reopen_bottom_action = QAction("底部悬浮窗", self)
+        self.reopen_bottom_action.setCheckable(True)  # 设置为可检查
+        self.reopen_bottom_action.toggled.connect(self.toggle_bottom_dock)  # 连接 toggled 信号
+        view_menu.addAction(self.reopen_bottom_action)
+
+        # 初始化菜单项的检查状态以匹配悬浮窗的可见性
+        # 这里要确保右侧和底部的悬浮窗初始时是可见的，并将对应的菜单项选中
+        self.reopen_right_action.setChecked(True)  # 右侧悬浮窗默认选中
+        self.reopen_bottom_action.setChecked(True)  # 底部悬浮窗默认选中
+
+        # 更新悬浮窗的可见性，以便它们在应用启动时显示
+        self.right_widget.setVisible(True)
+        self.bottom_widget.setVisible(True)
+
+    def toggle_right_dock(self):
+        """切换右侧悬浮窗的可见性，并更新菜单项的检查状态"""
+        self.right_widget.setVisible(self.reopen_right_action.isChecked())
+
+    def toggle_bottom_dock(self):
+        """切换底部悬浮窗的可见性，并更新菜单项的检查状态"""
+        self.bottom_widget.setVisible(self.reopen_bottom_action.isChecked())
