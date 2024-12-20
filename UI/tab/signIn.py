@@ -3,23 +3,24 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QPushButton,
     QLabel,
-    QTextEdit,
-    QFileDialog,
     QApplication,
     QHBoxLayout,
     QComboBox,
     QCheckBox,
-    QLineEdit
+    QLineEdit,
+    QScrollArea
 )
-import json
-import sys
-
 
 class signlnWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
-        # 创建主要布局
-        layout = QVBoxLayout()
+
+        # 创建一个主要的 QWidget 作为滚动区域的内容
+        scroll_area_content = QWidget()
+        # ！上面是八股文，不用动
+
+        # 把你的布局丢在这里
+        layout = QVBoxLayout(scroll_area_content)
 
         # 水平布局
         fun_name_Layout = QHBoxLayout()
@@ -60,13 +61,18 @@ class signlnWidget(QWidget):
         fun_arr.addWidget(self.add1)
         layout.addLayout(fun_arr)
 
+        self.fun_make_code = QPushButton("生成代码")
+        layout.addWidget(self.fun_make_code)
 
-        # 设置生成代码按钮
-        self.make_code = QPushButton("生成代码",self)
-        layout.addWidget(self.make_code)
+        # ！下面是八股文，不用动
+        # 创建 QScrollArea 并设置其内容为 scroll_area_content
+        scroll_area = QScrollArea(self)
+        scroll_area.setWidget(scroll_area_content)
+        scroll_area.setWidgetResizable(True)  # 允许内容调整大小
 
-        # 设置布局
-        self.setLayout(layout)
+        # 创建一个最外层的 QVBoxLayout 并将 QScrollArea 添加到其中
+        outer_layout = QVBoxLayout(self)
+        outer_layout.addWidget(scroll_area)
 
 
 # 这是一个简单的测试函数，用于在独立运行时显示窗口（通常不需要在最终项目中）

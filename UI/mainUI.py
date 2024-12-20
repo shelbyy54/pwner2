@@ -1,11 +1,3 @@
-import sys
-from PyQt6.QtWidgets import (
-    QMainWindow,
-    QTabWidget,
-    QDockWidget,
-    QVBoxLayout,
-    QWidget,
-)
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QApplication,
@@ -17,7 +9,7 @@ from PyQt6.QtWidgets import (
     QWidget,
     QMenuBar,
 )
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QPalette, QColor
 import sys
 
 # 导入模块
@@ -76,33 +68,26 @@ class MainWindow(QMainWindow):
         menubar = self.menuBar()
 
         # 创建视图菜单
-        view_menu = menubar.addMenu("视图")
+        view_menu = menubar.addMenu("悬浮窗")
 
         # 创建右侧悬浮窗的重新打开操作
         self.reopen_right_action = QAction("右侧悬浮窗", self)
         self.reopen_right_action.setCheckable(True)  # 设置为可检查
-        self.reopen_right_action.toggled.connect(self.toggle_right_dock)  # 连接 toggled 信号
+        self.reopen_right_action.toggled.connect(lambda: self.right_widget.setVisible(
+            self.reopen_right_action.isChecked()))  # 连接 toggled 信号
         view_menu.addAction(self.reopen_right_action)
 
         # 创建底部悬浮窗的重新打开操作
         self.reopen_bottom_action = QAction("底部悬浮窗", self)
         self.reopen_bottom_action.setCheckable(True)  # 设置为可检查
-        self.reopen_bottom_action.toggled.connect(self.toggle_bottom_dock)  # 连接 toggled 信号
+        self.reopen_bottom_action.toggled.connect(lambda: self.bottom_widget.setVisible(
+            self.reopen_bottom_action.isChecked()))  # 连接 toggled 信号
         view_menu.addAction(self.reopen_bottom_action)
 
         # 初始化菜单项的检查状态以匹配悬浮窗的可见性
-        # 这里要确保右侧和底部的悬浮窗初始时是可见的，并将对应的菜单项选中
         self.reopen_right_action.setChecked(True)  # 右侧悬浮窗默认选中
         self.reopen_bottom_action.setChecked(True)  # 底部悬浮窗默认选中
 
         # 更新悬浮窗的可见性，以便它们在应用启动时显示
         self.right_widget.setVisible(True)
         self.bottom_widget.setVisible(True)
-
-    def toggle_right_dock(self):
-        """切换右侧悬浮窗的可见性，并更新菜单项的检查状态"""
-        self.right_widget.setVisible(self.reopen_right_action.isChecked())
-
-    def toggle_bottom_dock(self):
-        """切换底部悬浮窗的可见性，并更新菜单项的检查状态"""
-        self.bottom_widget.setVisible(self.reopen_bottom_action.isChecked())

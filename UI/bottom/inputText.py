@@ -1,12 +1,9 @@
-from PyQt6.QtCore import QRegularExpression, Qt
-from PyQt6.QtGui import QSyntaxHighlighter, QTextCharFormat, QColor
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import (
     QApplication,
     QWidget,
-    QPlainTextEdit,
     QVBoxLayout,
     QHBoxLayout,
-    QPushButton,
     QDockWidget
 )
 import sys
@@ -35,10 +32,10 @@ class inputText(QDockWidget):
         input_1.addWidget(inputAddress())
         input_1.addWidget(inputAddress())
         input_1.addWidget(inputAddress())
-        input_Layout.addLayout(input_0)
-        input_Layout.addLayout(input_1)
 
         # 设置窗口的布局
+        input_Layout.addLayout(input_0)
+        input_Layout.addLayout(input_1)
         widget = QWidget()
         widget.setLayout(input_Layout)
         self.setWidget(widget)

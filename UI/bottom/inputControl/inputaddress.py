@@ -1,18 +1,13 @@
 from PyQt6.QtWidgets import (
     QWidget,
-    QVBoxLayout,
-    QPushButton,
     QLabel,
-    QTextEdit,
-    QFileDialog,
-    QApplication,
     QHBoxLayout,
     QComboBox,
-    QCheckBox,
     QLineEdit
 )
-from PyQt6.QtCore import Qt, QPoint, QMimeData
+from PyQt6.QtCore import Qt, QMimeData
 from PyQt6.QtGui import QDrag, QPixmap, QPainter
+from PyQt6.QtWidgets import QPushButton
 
 
 class inputAddress(QWidget):
@@ -30,56 +25,60 @@ class inputAddress(QWidget):
         self.system.addItem('x64')
         self.system.addItem('arm')
 
+        self.clear_button = QPushButton("清空", self)
+        self.clear_button.clicked.connect(lambda: self.text_input.clear())
+
         # 创建水平布局
-        layout = QHBoxLayout()
+        layout = QHBoxLayout(self)
         layout.addWidget(self.label)
         layout.addWidget(self.system)
         layout.addWidget(self.text_input)
+        layout.addWidget(self.clear_button)
 
-        # 用于存储鼠标按下的起始位置
-        self.drag_position = QPoint()
+        # 记录控件的初始文本内容
+        self.original_text = self.text_input.text()
 
-        # 设置窗口的布局
-        self.setLayout(layout)
+        # 记录控件的初始位置（用于可能的拖动恢复，虽然在此示例中不使用）
+        self.original_position = self.pos()
 
-    def mousePressEvent(self, event):
-        """记录鼠标按下的位置"""
+        # 启用鼠标跟踪以检测拖动
+        self.setMouseTracking(True)
+
+    def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
-            self.drag_position = event.position().toPoint()
-
-            # 开始拖动
             self.start_drag(event)
 
     def start_drag(self, event):
-        """启动拖动操作"""
-        drag = QDrag(self)  # 创建QDrag对象
-        mime_data = QMimeData()  # 创建MIME数据
-
-        # 设置拖动时显示的图像
+        drag = QDrag(self)
+        mime_data = QMimeData()
         pixmap = QPixmap(self.size())
-        self.render(pixmap)  # 渲染控件内容为图像
-        drag.setPixmap(pixmap)  # 设置图像作为拖动时的图标
-
-        # 设置MIME数据（此处为空，可以根据需要传输额外数据）
+        pixmap.fill(Qt.GlobalColor.white)
+        painter = QPainter(pixmap)
+        self.render(painter)
+        painter.end()
+        drag.setPixmap(pixmap)
+        mime_data.setText(self.add_system_format_text(self.text_input.text()))
         drag.setMimeData(mime_data)
+        drag.exec(Qt.DropAction.CopyAction)
 
-        # 执行拖动，使用移动动作
-        drag.exec(Qt.DropAction.MoveAction)
+    def add_system_format_text(self, base_text):
+        selected_system = self.system.currentText()
+        if selected_system == 'x86':
+            return f'p32({base_text})'
+        elif selected_system == 'x64':
+            return f'p64({base_text})'
+        elif selected_system == 'arm':
+            return f'parm({base_text})'
+        return base_text
 
-    def mouseMoveEvent(self, event):
-        """根据鼠标移动更新控件位置"""
-        # 注意：此方法的实现已经不再需要用于处理拖动，因为我们已经使用了QDrag来处理拖动。
-        pass
-
-    def mouseReleaseEvent(self, event):
-        """释放鼠标时恢复控件原位"""
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.move(self.pos())  # 恢复控件到原始位置
-
-    def get_value(self):
+    def get_value(self) -> str:
         """返回输入框中的值"""
         return self.text_input.text()
 
-    def set_value(self, value):
+    def set_value(self, value: str) -> None:
         """设置输入框中的值"""
-        self.text_input.setText(str(value))
+        self.text_input.setText(value)
+
+    def restore_original_text(self):
+        """恢复原始文本内容"""
+        self.text_input.setText(self.original_text)
